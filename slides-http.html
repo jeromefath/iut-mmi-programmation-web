@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Protocole HTTP</title>
+
+	<meta name="author" content="Jérôme Fath">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+</head>
+<body>
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+
+		<section>
+			<h1>Protocole HTTP</h1>
+			<h3 class="fragment">HyperText Transfer Protocol</h3>
+			<blockquote class="fragment">Le protocole HTTP est tout simplement un langage texte qui permet à deux machines de communiquer ensemble.</blockquote>
+		</section>
+
+		<section>
+			<section>
+				<h1>Client envoie une requête</h1>
+				<img width="573" height="167" src="./img/slides-http/request.png" />
+				<p>Une requête est un message texte envoyé par un client en respectant la syntaxe attendue par le protocole HTTP.</p>
+			</section>
+			<section>
+				<p>Voici un exemple de requête HTTP :</p>
+				<pre><code class="http">
+GET /mon-planning-semaine HTTP/1.1
+Host: universite-savoie.com
+Accept: text/html
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0
+				</code></pre>
+				<ul>
+					<li class="fragment">Méthode HTTP et URI</li>
+					<li class="fragment">Entêtes de requête (format de réponses accepté par le client, informations sur le cache,...)</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Serveur retourne une réponse</h1>
+				<img width="698" height="255" src="./img/slides-http/response.png" />
+			</section>
+			<section>
+				<p>Voici un exemple de réponse HTTP :</p>
+				<pre><code class="http">
+HTTP/1.1 200 OK
+Date: Sun, 07 Feb 2016 17:23:34 GMT
+Server: Apache/2.4.10 (Debian)
+Content-Type: text/html
+<html>
+<!-- ... code HTML de mon planning de la semaine -->
+</html>
+				</code></pre>
+				<ul>
+					<li class="fragment">Code de statut de la réponse HTTP</li>
+					<li class="fragment">Entêtes de réponse (format de réponse retourné, informations sur le serveur web,...)</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Application web</h1>
+				<p>L'objectif d'une application web reste toujours identique et ce avec n'importe quel langage de programmation.</p>
+				<blockquote class="fragment">Le principe fondamental du développement web est de comprendre chaque requête HTTP composée de texte et de retourner la réponse appropriée.</blockquote>
+			</section>
+			<section>
+				<h1>Requêtes et réponses en PHP</h1>
+				<pre><code class="php">
+$uri = $_SERVER['REQUEST_URI'];
+$foo = $_GET['foo'];
+header('Content-type: text/html');
+echo 'L\'URI demandée est: '.$uri;
+echo 'La valeur du paramètre "foo" est: '.$foo;
+				</code></pre>
+				<p class="fragment">PHP prépare les variables $_SERVER, $_GET,... qui contiennent les données de la requête ; le script exploite ces informations afin de créer une réponse.</p>
+			</section>
+		</section>
+
+	</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+	// More info about config & dependencies:
+	// - https://github.com/hakimel/reveal.js#configuration
+	// - https://github.com/hakimel/reveal.js#dependencies
+	Reveal.initialize({
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js' },
+			{ src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/notes/notes.js', async: true },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+</script>
+</body>
+</html>

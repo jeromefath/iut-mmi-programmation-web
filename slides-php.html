@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>PHP, superglobales et base de données</title>
+
+	<meta name="author" content="Jérôme Fath">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+</head>
+<body>
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+		<!-- $_GET -->
+		<section>
+			<section>
+				<h1>SUPERGLOBALE $_GET</h1>
+				<p>Votre fichier <mark>index.php</mark> doit stocker dans des variables la valeur des paramètres <mark>page</mark> et <mark>action</mark>.</p>
+			</section>
+			<section>
+				<pre><code class="php">
+// http://localhost:8000?page=article
+
+$page = null;
+if( isset($_GET['page']) ) {
+    $page = $_GET['page'];
+}
+
+$action = 'index';
+if( isset($_GET['action']) ) {
+    $action = $_GET['action'];
+}
+				</code></pre>
+			</section>
+			<section>
+				<h1>Inclusion dynamique</h1>
+				<p>Dans votre fichier <mark>index.php</mark>, vous devez utiliser les variables <mark>$page</mark> et <mark>$action</mark> pour inclure dynamiquement le script a exécuter.</p>
+				<pre><code class="php">
+$file = '../pages/' . $page . '/' . $action . '.php';
+if(file_exists($file)) {
+    include $file;
+    exit;
+}
+				</code></pre>
+			</section>
+			<section>
+				<h1>Erreur 404</h1>
+				<p>Si le script n'existe pas, nous demandons à PHP de modifier le code statut de la réponse HTTP pour signaler une erreur 404 à l'internaute ; une page d'erreur personnalisée est proposée.</p>
+				<pre><code class="php">
+http_response_code(404);
+include '../pages/errors/404.php';
+				</code></pre>
+			</section>
+		</section>
+		<!-- PDO -->
+		<section>
+			<section>
+				<h1>PDO</h1>
+				<p>Extension définissant une interface pour accéder à une base de données depuis PHP.</p>
+				<blockquote class="fragment">Interface d'abstraction pour exécuter avec les mêmes fonctions des requêtes sur différents systèmes de gestion de base de données.</blockquote>
+			</section>
+			<section>
+				<h1>SQLite</h1>
+				<p>Ajoutez un fichier <mark>index.php</mark> dans le répertoire <mark>pages/article</mark> ; instanciez un objet PDO.</p>
+				<pre><code class="php">
+$pdo = new PDO(DATABASE_DSN);
+				</code></pre>
+				<blockquote class="fragment">Data Source Name, contient les informations requises pour se connecter à la base.</blockquote>
+			</section>
+			<section>
+				<p>Réalisez une requête pour sélectionner l'ensemble des articles de la base de données SQLite.</p>
+				<pre><code class="php">
+$stmt = $pdo->prepare("SELECT * FROM article");
+$stmt->execute();
+
+$articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				</code></pre>
+			</section>
+			<section>
+				<h1>PHP Templating</h1>
+				<p>PHP propose une <a href="http://php.net/manual/fr/control-structures.alternative-syntax.php">autre manière</a> de rassembler des instructions à l'intérieur d'un bloc, pour les fonctions de contrôle if, while, for, foreach et switch.</p>
+			</section>
+			<section>
+				<p>Utilisez cette nouvelle syntaxe pour afficher vos articles dans votre code HTML.</p>
+				<pre><code class="xml">
+&lsaquo;?php foreach($articles as $article) : ?&rsaquo;
+<article>
+	<h3>&lsaquo;?php echo $article['title']; ?&rsaquo;</h3>
+	&lsaquo;?php echo $article['description']; ?&rsaquo;
+	<a href="&lsaquo;?php echo $article['link']; ?&rsaquo;">
+		Voir l'article
+	</a>
+</article>
+&lsaquo;?php endforeach; ?&rsaquo;
+				</code></pre>
+			</section>
+		</section>
+		<!-- $_POST -->
+		<section>
+			<section>
+				<h1>SUPERGLOBALE  $_POST</h1>
+				<p>Créez un fichier <mark>create.php</mark> dans le répertoire <mark>pages/article</mark> afin d'ajouter un formulaire de saisie d'un article.</p>
+			</section>
+			<section>
+				<pre><code class="xml">
+<!-- http://localhost:8000?page=article&action=create -->
+
+<form method="post">
+    <div>
+        <label for="title">Titre :</label>
+        <input id="title" name="title" type="text" />
+    </div>
+    <div>
+        <label for="description">Description :</label>
+        <textarea id="description" name="description"></textarea>
+    </div>
+    <div>
+        <label for="link">Lien :</label>
+        <input id="link" name="link" type="url" />
+    </div>
+    <button type="submit" name="submit">Envoyer</button>
+</form>
+				</code></pre>
+				<p>Analysez les en-têtes de la requête via "Outils de développement" lors de la soumission du formulaire.</p>
+			</section>
+		</section>
+	</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+	// More info about config & dependencies:
+	// - https://github.com/hakimel/reveal.js#configuration
+	// - https://github.com/hakimel/reveal.js#dependencies
+	Reveal.initialize({
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js' },
+			{ src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/notes/notes.js', async: true },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+</script>
+</body>
+</html>

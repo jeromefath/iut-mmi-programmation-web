@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Architecture d'un projet web</title>
+
+	<meta name="author" content="Jérôme Fath">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+</head>
+<body>
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+
+		<section>
+			<h1>Architecture</h1>
+			<ul>
+				<li class="fragment">
+					<strong>cli</strong> (scripts PHP exécutés en ligne de commande)
+				</li>
+				<li class="fragment">
+					<strong>pages</strong> (scripts PHP pour afficher votre code HTML)
+				</li>
+				<li class="fragment">
+					<strong>src</strong> (classes PHP chargées via autoloader)
+				</li>
+				<li class="fragment">
+					<strong>web</strong>
+					<ul>
+						<li>css</li>
+						<li>js</li>
+						<li>img</li>
+					</ul>
+				</li>
+			</ul>
+		</section>
+
+		<section>
+			<h1>PHP - CLI</h1>
+			<p class="fragment">PHP peut être utilisé en ligne de commande afin de créer des scripts shell ; il est possible d'exploiter un script <strong>PHP sans serveur web</strong> (Apache, Ngenix,...)</p>
+		</section>
+
+		<section>
+			<h1>Serveur web</h1>
+			<p>Un serveur web de développement est disponible avec PHP, les requêtes sont servies depuis le dossier de travail courant où PHP a été démarré.</p>
+			<pre><code class="sh">
+php -S localhost:8000
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>Point d'entrée</h1>
+			<p>Créez avec votre éditeur de code un fichier nommé <mark>index.php</mark> à la racine de votre répertoire <mark>web</mark>.</p>
+			<p class="fragment">
+				<em>index.php va permettre le chargement de l'ensemble de vos scripts pour afficher votre HTML.</em>
+			</p>
+		</section>
+
+	</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+	// More info about config & dependencies:
+	// - https://github.com/hakimel/reveal.js#configuration
+	// - https://github.com/hakimel/reveal.js#dependencies
+	Reveal.initialize({
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js' },
+			{ src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/notes/notes.js', async: true },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+</script>
+</body>
+</html>

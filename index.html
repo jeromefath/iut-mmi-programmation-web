@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Programmation web</title>
+
+	<meta name="author" content="Jérôme Fath">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+</head>
+<body>
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+		<!-- Introduction -->
+		<section>
+			<h1>Programmation web</h1>
+			<h3>IUT MMI de l'université Savoie Mont Blanc</h3>
+			<p>Présenté par Jérôme Fath - <a href="https://www.linkedin.com/in/jeromefath">LinkedIn</a> / <a href="https://github.com/jeromefath">GitHub</a></p>
+		</section>
+		<!-- Summary -->
+		<section>
+			<ol>
+				<li>
+					<a href="slides-architecture.html">Architecture projet web</a>
+				</li>
+				<li>
+					<a href="slides-http.html">Rappel du protocole HTTP</a>
+				</li>
+				<li>
+					<a href="slides-php.html">PHP, superglobales et bases de données</a>
+				</li>
+				<li>
+					<a href="slides-dependencies.html">Gestion de dépendances</a>
+				</li>
+				<li>
+					<a href="slides-git.html">Gestion de versions - Git</a>
+				</li>
+				<li>
+					<a href="slides-sass.html">Préprocesseur CSS - SASS</a>
+				</li>
+			</ol>
+		</section>
+
+	</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+	// More info about config & dependencies:
+	// - https://github.com/hakimel/reveal.js#configuration
+	// - https://github.com/hakimel/reveal.js#dependencies
+	Reveal.initialize({
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js' },
+			{ src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/notes/notes.js', async: true },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+</script>
+</body>
+</html>
