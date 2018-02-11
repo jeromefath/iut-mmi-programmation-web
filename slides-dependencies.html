@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Gestion de dépendances</title>
+
+	<meta name="author" content="Jérôme Fath">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+</head>
+<body>
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+
+		<section>
+			<h1>Dépendances</h1>
+			<p class="fragment">Ne pas partir de zéro = Application a besoin de librairies</p>
+		</section>
+
+		<section>
+			<section>
+				<h1>Dépendances PHP</h1>
+				<h2>[Composer]</h2>
+			</section>
+			<section>
+				<h1>Installation de Composer</h1>
+				<a href="https://getcomposer.org/composer.phar">https://getcomposer.org/composer.phar</a>
+			</section>
+			<section>
+				<h1>Extension Phar</h1>
+				<p>Une archive Phar est une application PHP complète diffusée dans un seul fichier.</p>
+				<pre><code class="sh">
+php composer.phar self-update
+				</code></pre>
+				<ul>
+					<li class="fragment">Moyen pratique de grouper plusieurs fichiers en un seul (diffusion simplifiée)</li>
+					<li class="fragment">Execution de l'application à partir d'un fichier Phar (sans extraction sur le disque)</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>composer.json</h1>
+				<ul>
+					<li class="fragment">Nom, description, auteur du projet</li>
+					<li class="fragment">Dépendances et dépendances de développement (librairies de tests)</li>
+				</ul>
+			</section>
+			<section>
+				<p>Exemple d'un fichier composer.json</p>
+            	<pre><code class="json">
+{
+    "name": "app/feed-reader",
+    "description": "Application lecteur rss",
+    "authors": [
+        {
+            "name": "Jerome Fath",
+            "email": "Jerome.Fath@univ-savoie.fr"
+        }
+    ],
+    "require": {}
+}
+			</code></pre>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Projet PHP</h1>
+				<p>Au démarrage d'un nouveau projet PHP, il suffira d'initiliser un nouveau fichier <mark>composer.json</mark>.</p>
+				<pre><code class="sh">
+php composer.phar init
+				 </code></pre>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Packagist</h1>
+				<p>Dépôt qui regroute les paquets PHP installés avec Composer <a href="https://packagist.org/">https://packagist.org/</a></p>
+			</section>
+			<section>
+				<h1>Ajouter une dépendance PHP</h1>
+				<pre><code class="sh">
+php composer.phar require zendframework/zend-feed
+				</code></pre>
+				<p class="fragment">Composer va automatiquement charger les dépendances de la librairie <mark>zendframework/zend-feed</mark> ; principe de résolution de dépendances.</p>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Composer.lock</h1>
+				<p>Fichier contient le résultat de la résolution de dépendances.</p>
+				<ul>
+					<li class="fragment">Version exacte installée</li>
+					<li class="fragment">Url du dépôt distant</li>
+				</ul>
+			</section>
+			<section>
+				<h1>Installer des dépendances</h1>
+				<pre><code class="sh">
+php composer.phar install
+				</code></pre>
+				<p class="fragment">Vérifie si le fichier composer.lock est présent et utilise le résultat de la résolution pour installer les dépendances d'un projet dans le même état.</p>
+			</section>
+			<section>
+				<h1>Mise à jour des dépendances</h1>
+				<pre><code class="sh">
+php composer.phar update
+				</code></pre>
+				<p class="fragment">Ignore le fichier composer.lock et relance la résolution des dépendances ; réalise une différence entre la nouvelle résolution et celle du fichier composer.lock pour mettre à jour les dépendances.</p>
+			</section>
+		</section>
+
+	</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+	// More info about config & dependencies:
+	// - https://github.com/hakimel/reveal.js#configuration
+	// - https://github.com/hakimel/reveal.js#dependencies
+	Reveal.initialize({
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js' },
+			{ src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/notes/notes.js', async: true },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+</script>
+</body>
+</html>
