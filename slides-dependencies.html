@@ -130,6 +130,47 @@ php composer.phar update
 			</section>
 		</section>
 
+		<section>
+			<section>
+				<h1>Composer Autoloading</h1>
+				<p>Composer dispose d'une fonction d'autoloading ; lorsque composer installe un package, il sait comment le charger.</p>
+				<ul class="fragment">
+					<li>PSR0 <a href="http://www.php-fig.org/psr/psr-0/">www.php-fig.org/psr/psr-0</a></li>
+					<li>PSR4 <a href="http://www.php-fig.org/psr/psr-4/">www.php-fig.org/psr/psr-4</a></li>
+				</ul>
+			</section>
+			<section>
+				<pre><code class="php">
+require '../vendor/autoload.php';
+
+$feed = Zend\Feed\Reader\Reader::import('http://etin.yourphototravel.com/fr/etins.rss');
+foreach($feed as $item) {
+    echo $item->getTitle();
+}
+				</code></pre>
+			</section>
+			<section>
+				<h1>Autoloader son code source</h1>
+				<pre><code class="json">
+ {
+    ...
+    "autoload": {
+       "psr-4": {
+           "": "src/"
+       },
+    },
+ }
+ 				</code></pre>
+			</section>
+			<section>
+				<h1>Regénérer l'autoloader</h1>
+				<pre><code class="sh">
+php composer.phar dump-autoload
+				</code></pre>
+				<p class="fragment">Lorsque nous définissons le répertoire du code source de l'application, celui-ci ne peut pas encore être chargé par Composer.</p>
+			</section>
+		</section>
+
 	</div>
 </div>
 
