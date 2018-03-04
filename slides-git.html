@@ -1,0 +1,347 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Gestion de versions - Git</title>
+
+	<meta name="author" content="Jérôme Fath">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName( 'head' )[0].appendChild( link );
+	</script>
+</head>
+<body>
+<div class="reveal">
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+
+		<section>
+			<section>
+				<h1>Gestion de versions</h1>
+				<ul>
+					<li>Enregistrer l'évolution des fichiers</li>
+					<li>Ramener les fichiers à un état précédent</li>
+					<li>Visualiser les changements dans le temps</li>
+				</ul>
+			</section>
+			<section>
+				<h1>Système local</h1>
+				<ul>
+					<li>RCS</li>
+					<li>Gestion de patchs (stock diff)</li>
+					<li>Base de données en local</li>
+				</ul>
+			</section>
+			<section>
+				<h1>Système centralisé</h1>
+				<ul>
+					<li>CSV, Subversion</li>
+					<li>Serveur central avec les fichiers versionnés</li>
+					<ul>
+						<li>(+) collaboration entre plusieurs personnes</li>
+						<li>(-) serveur en panne = stop versionning</li>
+						<li>(-) historique à un endroit unique</li>
+					</ul>
+				</ul>
+			</section>
+			<section>
+				<h1>Système distribué</h1>
+				<ul>
+					<li>Git, Mercurial</li>
+					<li>Un dépôt contient tout l'historique</li>
+					<li>Une extraction = sauvegarde complète des données</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<h1>Installation</h1>
+			<p>Debian GNU/Linux</p>
+			<pre><code class="sh">
+apt-get install git
+			</code></pre>
+			<ul>
+				<li>Mac <a href="http://git-scm.com/download/mac">http://git-scm.com/download/mac</a></li>
+				<li>Windows <a href="http://git-scm.com/download/win">http://git-scm.com/download/win</a></li>
+			</ul>
+		</section>
+
+		<section>
+			<section>
+				<h1>Démarrer un dépôt</h1>
+				<ol>
+					<li>Prendre un projet existant et l’importer dans Git</li>
+					<li>Cloner un dépôt Git existant depuis un serveur</li>
+				</ol>
+			</section>
+			<section>
+				<h2>Cloner un dépôt</h2>
+				<p>Git reçoit une copie de quasiment toutes les données dont le serveur dispose, l'historique de tous les fichiers du projet est téléchargé.</p>
+				<pre><code class="sh">
+git clone https://github.com/jeromefath/iut-mmi-programmation-web.git
+				</code></pre>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Git, les rudiments</h1>
+				<p>Qu'est-ce que Git en quelques mots ?</p>
+			</section>
+			<section>
+				<h2>Git, les opérations sont locales</h2>
+				<ul>
+					<li class="fragment">parcourir historique</li>
+					<li class="fragment">gestion des versions</li>
+					<li class="fragment">...</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Git, les trois états</h2>
+				<ul>
+					<li class="fragment">validé (données stockées dans la base locale)</li>
+					<li class="fragment">modifié (fichié modifié, pas encore validé en base)</li>
+					<li class="fragment">indexé (marque un fichier modifié pour faire partie de la prochaine version)</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Sections d'un projet Git</h2>
+				<ul>
+					<li class="fragment">répertoire Git (méta-données + base de données)</li>
+					<li class="fragment">répertoire de travail (extraction unique d'une version d'un projet)</li>
+					<li class="fragment">zone d'index (fichiers avec informations sur prochaine version)</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Utilisation standard de Git</h2>
+				<ol>
+					<li class="fragment">Modification des fichiers dans le répertoire de travail</li>
+					<li class="fragment">Indexer fichiers modifiés = ajout des infos dans la zone d'index</li>
+					<li class="fragment">Valider = ajout d'une version dans la base de données locale de git</li>
+				</ol>
+			</section>
+			<section>
+				<img alt="Répertoire de travail, zone d'index et répertoire Git." src="http://git-scm.com/book/en/v2/book/01-introduction/images/areas.png" />
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Git, enregistrer des modifications</h1>
+				<em class="fragment">Cas de figure pour un projet cloné à partir d'un dépôt Git existant.</em>
+			</section>
+			<section>
+				<p>Pour vérifier quels fichiers sont dans quel état :</p>
+				<pre><code class="sh">
+git status
+				</code></pre>
+				<p>Pour consulter les modifications de façon plus compacte :</p>
+				<pre><code class="sh">
+git status -s
+				</code></pre>
+			</section>
+			<section>
+				<p>Placer de nouveaux fichiers sous suivi de version ou indexer des fichiers modifiés :</p>
+				<pre><code class="sh">
+git add file1.txt
+				</code></pre>
+			</section>
+			<section>
+				<p>Dans le cas où un fichier est accidentelement indexé, il est possible d'abandonner le suivi de version :</p>
+				<pre><code class="sh">
+git rm --cached file1.txt
+				</code></pre>
+			</section>
+			<section>
+				<p>Pour visualiser ce qui a été modifié mais pas encore indexé :</p>
+				<pre><code class="sh">
+git diff
+				</code></pre>
+			</section>
+			<section>
+				<p>Pour visualiser les modifications indexées qui feront partie de la prochaine validation :</p>
+				<pre><code class="sh">
+git diff --cached
+				</code></pre>
+			</section>
+			<section>
+				<p>Une fois la zone d’index dans l’état désirée, valider (crée une nouvelle version) et ajouter un message pour décrire les modifications :</p>
+				<pre><code class="sh">
+git commit
+				</code></pre>
+			</section>
+			<section>
+				<p>Le message de validation peut être renseigé en ligne de commande :</p>
+				<pre><code class="sh">
+git commit -m "description du commit"
+				</code></pre>
+			</section>
+			<section>
+				<p>Pour consulter un historique de validation (commits) :</p>
+				<pre><code class="sh">
+git log #affiche le détail des commits
+git log --pretty=oneline #affiche un résumé sur une ligne de chaque commit
+				</code></pre>
+			</section>
+			<section>
+				<p><em>.gitignore</em>, détermine les fichiers ne devant pas apparaître pour le suivi de version :</p>
+				<pre><code class="ini">
+.DS_Store
+.svn
+log/*.log
+tmp/**
+node_modules/
+.sass-cache
+css/reveal.min.css
+js/reveal.min.js
+				</code></pre>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Git, dépôt distant</h1>
+				<em class="fragment">Cas de figure pour un projet existant importer dans Git.</em>
+			</section>
+			<section>
+				<p>Création d'un dépôt git dans un répertoire existant :</p>
+				<pre><code class="sh">
+git init
+				</code></pre>
+				<p class="fragment">A cet instant un nouveau répertoire <mark>.git</mark> est créé et encore aucun fichier n'est versionné.</p>
+			</section>
+			<section>
+				<p>Les dépôts distants sont des versions du projet hébergées sur un serveur, il est possible de configurer plusieurs dépôts :</p>
+				<pre><code class="sh">
+git remote add [name] [url]
+				</code></pre>
+			</section>
+			<section>
+				<p>Pour visualiser les serveurs distants enregistrés :</p>
+				<pre><code class="sh">
+git remote
+				</code></pre>
+				<p>Ajouter l'option -v pour obtenir l'url associée à chaque nom des dépôts distants enregistrés :</p>
+				<pre><code class="sh">
+git remote -v
+				</code></pre>
+			</section>
+			<section>
+				<p>Récupérer et tirer depuis des dépôts distants, pour obtenir les données lancer la commande :</p>
+				<pre><code class="sh">
+git fetch [name]
+				</code></pre>
+			</section>
+			<section>
+				<p>Pousser son travail sur un dépôt distant avec la commande :</p>
+				<pre><code class="sh">
+git push [name] [branch]
+				</code></pre>
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Git, la magie des branches</h1>
+				<p class="fragment">Pour les systèmes de gestion de versions, les branches peuvent être représentées par la séparation d'une route en deux chemins distincts.</p>
+			</section>
+			<section>
+				<p>Dans Git, une branche est un pointeur vers un commit du dépôt.</p>
+				<img alt="Représentation d'une branche et l'historique de ses commits." src="http://git-scm.com/book/en/v2/book/03-git-branching/images/branch-and-history.png" style="height:350px;"/>
+				<p>À chaque validation, le pointeur de la branche master avance automatiquement.</p>
+			</section>
+			<section>
+				<p>Comment créer une nouvelle branche ?</p>
+				<pre><code class="sh">
+git branch testing
+				</code></pre>
+				<img alt="Représentation du pointeur HEAD vers une branche." src="http://git-scm.com/book/en/v2/book/03-git-branching/images/head-to-master.png" style="height:350px;" />
+			</section>
+			<section>
+				<p>Comment basculer entre les branches ?</p>
+				<pre><code class="sh">
+git checkout testing
+				</code></pre>
+				<img alt="HEAD pointe vers la branche courante." src="http://git-scm.com/book/en/v2/book/03-git-branching/images/head-to-testing.png" style="height:350px;" />
+			</section>
+			<section>
+				<pre><code class="sh">
+git add file.txt
+git commit -m "add file"
+				</code></pre>
+				<img alt="La branche HEAD avance à chaque _commit_." src="http://git-scm.com/book/en/v2/book/03-git-branching/images/advance-testing.png" />
+			</section>
+		</section>
+
+		<section>
+			<section>
+				<h1>Git, branches et fusions</h1>
+				<p class="fragment">Nous travaillons sur notre branche <mark>testing</mark> pour l'implémentation d'une nouvelle fonctionnalité.</p>
+			</section>
+			<section>
+				<p>Une fois le développement terminé, la branche <mark>testing</mark> est fusionnée dans <merk>master</merk>.</p>
+				<pre><code class="sh">
+git checkout master
+git merge testing
+				</code></pre>
+				<em class="fragment">Attention aux conflits de fusions !</em>
+			</section>
+			<section>
+				<p>Les branches distantes permettent de conserver l’état des branches sur votre dépôt distant.</p>
+				<img alt="Les travaux locaux et distants peuvent diverger." src="http://git-scm.com/book/en/v2/book/03-git-branching/images/remote-branches-2.png" style="height:350px;" />
+			</section>
+			<section>
+				<p>Dans le cas d'un projet collaboratif, vous pouvez synchroniser vos travaux avec les commandes suivantes :</p>
+				<pre><code class="sh">
+git fetch origin #récupère les données distantes mise à jour par un autre développeur
+git merge origin/master #fusionne votre branche master avec les données distantes rapatriées
+				</code></pre>
+			</section>
+			<section>
+				<p>Une branche de suivie permet de rapatrier et fusionner les données depuis un dépôt distant en une commande :</p>
+				<pre><code class="sh">
+git pull origin master
+				</code></pre>
+			</section>
+			<section>
+				<p>Pour obtenir la liste des branches distantes suivies ou non rapatriées et celles automatiquement poussées, utilisez la commande en spécifiant le nom court du dépôt distant :</p>
+				<pre><code class="sh">
+git remote show [name]
+				</code></pre>
+			</section>
+		</section>
+
+	</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+	// More info about config & dependencies:
+	// - https://github.com/hakimel/reveal.js#configuration
+	// - https://github.com/hakimel/reveal.js#dependencies
+	Reveal.initialize({
+		dependencies: [
+			{ src: 'plugin/markdown/marked.js' },
+			{ src: 'plugin/markdown/markdown.js' },
+			{ src: 'plugin/notes/notes.js', async: true },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+		]
+	});
+</script>
+</body>
+</html>
